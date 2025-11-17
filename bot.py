@@ -48,7 +48,7 @@ async def prograde(ctx, *, filename: str = None):
     if not chosen:
         await ctx.send(f"No file matching `{filename}` found.")
         return
-    matches = matches[0]
+    chosen = matches[0]
     await ctx.send(
         file=discord.File(chosen),
         content=f""
