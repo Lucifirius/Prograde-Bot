@@ -53,7 +53,7 @@ async def prograde(ctx, number: str = None):
         return
 
     # Look for a file that starts with the number followed by a dot (e.g. 69.png)
-    possible_files = [f for f in files if f.stem == number and f.suffix.lower() in {'.png', '.jpg', '.jpeg', '.gif', '.webp'}]
+    possible_files = [f for f in files if f.stem == number and f.suffix.lower() in {'.png', '.jpg', '.m4a', '.mov', '.jpeg', '.gif', '.webp', '.mp4'}]
 
     if not possible_files:
         await ctx.send(f"No #{number} found.")
