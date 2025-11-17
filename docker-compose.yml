@@ -1,0 +1,12 @@
+version: "3.9"
+
+services:
+  bot:
+    build: .
+    container_name: prograde-bot
+    restart: unless-stopped
+    env_file:
+      - .env                  # set DISCORD_TOKEN=
+    volumes:
+      # So you can keep adding new files without rebuilding
+      - ./prograde_files:/app/prograde_files
