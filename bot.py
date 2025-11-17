@@ -27,34 +27,47 @@ async def on_ready():
     print(f"{bot.user} is online and ready!")
 # -------------------------------------------------
 @bot.command(name="prograde")
-async def prograde(ctx, *, filename: str = None):
+async def prograde(ctx, number: str = None):
+    """
+    !prograde          → random crow pill
+    !prograde 123      → posts 123.png (or .jpg/.gif/.webp) if it exists
+    """
     if not FILES_DIR.is_dir():
-        await ctx.send("❌ prograde_files folder is missing!")
+        await ctx.send("prograde_files folder missing!")
         return
+
     files = [f for f in FILES_DIR.iterdir() if f.is_file()]
     if not files:
-        await ctx.send("❌ No files in prograde_files/")
+        await ctx.send("No files in prograde_files/")
         return
-# ── EXACT match only (case-insensitive) ──
-    filename_lower = filename.lower()
-# Try exact full filename first (including extension if user typed it)
-    chosen = next((f for f in files if f.name.lower() == filename_lower), None)
-    # If not found and user didn't type an extension, try stem-only match
-    if not chosen and '.' not in filename:
-        chosen = next(
-            (f for f in files if f.stem.lower() == filename_lower),
-            None
-        )
-    if not chosen:
-        await ctx.send(f"No file matching `{filename}` found.")
+
+    # ── No argument → random ──
+    if number is None:
+        chosen = random.choice(files)
+        await ctx.send(file=discord.File(chosen), content="")
         return
-    chosen = matches[0]
+
+    # ── Argument given → must be digits only ──
+    if not number.isdigit():
+        await ctx.send("Only numbers allowed! Use `!prograde 69` or just `!prograde` for random.")
+        return
+
+    # Look for a file that starts with the number followed by a dot (e.g. 69.png)
+    possible_files = [f for f in files if f.stem == number and f.suffix.lower() in {'.png', '.jpg', '.jpeg', '.gif', '.webp'}]
+
+    if not possible_files:
+        await ctx.send(f"No #{number} found.")
+        return
+
+    # If multiple extensions exist (rare), pick the first
+    chosen = possible_files[0]
+
     await ctx.send(
         file=discord.File(chosen),
         content=f""
     )
-    # Optional: nice error message if something explodes
+# Optional: nice error message if something explodes
 @prograde.error
 async def prograde_error(ctx, error):
-    await ctx.send("⚠️ Something went wrong with !prograde")
+    await ctx.send("Something went wrong with !prograde")
 bot.run(TOKEN)
