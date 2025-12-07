@@ -1,18 +1,20 @@
 #!/bin/bash
-# entrypoint.sh - Always update from git when container starts
-
 set -e
 
-echo "Fetching latest code from GitHub..."
-git fetch origin
+echo "Ensuring latest code from GitHub..."
 
-# Reset any local changes (in case you mounted volume with old files)
-git reset --hard
-git clean -fd
+if [ -d ".git" ]; then
+    echo "Git repository found → pulling latest changes"
+    git fetch --all
+    git reset --hard origin/main   # or origin/master
+    git clean -fd
+else
+    echo "No git repository found → cloning fresh"
+    git clone https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git /tmp/repo
+    cp -r /tmp/repo/* /app/
+    cp -r /tmp/repo/.git /app/
+    rm -rf /tmp/repo
+fi
 
-# Switch to your branch (main/master)
-git checkout main  # or master, depending on your default branch
-git pull origin main
-
-echo "Code updated! Starting bot..."
+echo "Code is up to date! Starting bot..."
 exec "$@"
