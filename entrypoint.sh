@@ -1,20 +1,22 @@
 #!/bin/bash
 set -e
 
-echo "Ensuring latest code from GitHub..."
+REPO_URL="${GIT_REPO_URL:-https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git}"
+BRANCH="${GIT_BRANCH:-main}"
+
+echo "Updating code from $REPO_URL (branch: $BRANCH)..."
 
 if [ -d ".git" ]; then
-    echo "Git repository found → pulling latest changes"
+    echo "Existing repo found → pulling latest"
     git fetch --all
-    git reset --hard origin/main   # or origin/master
+    git reset --hard "origin/$BRANCH"
     git clean -fd
 else
-    echo "No git repository found → cloning fresh"
-    git clone https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git /tmp/repo
-    cp -r /tmp/repo/* /app/
-    cp -r /tmp/repo/.git /app/
+    echo "No repo found → cloning fresh"
+    git clone --branch "$BRANCH" --single-branch "$REPO_URL" /tmp/repo
+    rsync -av /tmp/repo/ /app/
     rm -rf /tmp/repo
 fi
 
-echo "Code is up to date! Starting bot..."
+echo "Code updated! Starting bot..."
 exec "$@"
