@@ -6,10 +6,11 @@ import discord
 from discord.ext import commands
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv()  # This loads .env from /app/.env
 TOKEN = os.getenv("DISCORD_TOKEN")
+
 if not TOKEN:
-    raise ValueError("DISCORD_TOKEN not found in .env!")
+    raise ValueError("DISCORD_TOKEN not found! Check your .env file.")
 
 intents = discord.Intents.default()
 intents.message_content = True
