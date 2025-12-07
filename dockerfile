@@ -5,16 +5,15 @@ RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-# Copy entrypoint
+# Entrypoint
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-# Install requirements first (better layer caching)
+# Install Python deps
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy code will be handled by entrypoint
-# (we don't COPY . . anymore)
+# Code will be cloned/pulled by entrypoint → no COPY . .
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["python", "bot.py"]
