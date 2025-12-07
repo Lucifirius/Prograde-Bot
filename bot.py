@@ -21,7 +21,7 @@ AUTHORIZED_USER_IDS = {860310503578009630, 918951765188165663}
 @bot.event
 async def on_ready():
     print(f"{bot.user} is online!")
-    print(f"Loaded commands: {', '.join(bot.commands.keys())}")  # ← THIS IS KEY
+    print(f"Loaded commands: {', '.join([cmd.name for cmd in bot.commands])}")
 
 
 @bot.event
