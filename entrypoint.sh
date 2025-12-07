@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-REPO_URL="${GIT_REPO_URL:-https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git}"
-BRANCH="${GIT_BRANCH:-main}"
+REPO_URL="https://github.com/Lucifirius/Prograde-Bot.git"
+BRANCH="main"
 
 echo "Updating code from $REPO_URL (branch: $BRANCH)..."
 
