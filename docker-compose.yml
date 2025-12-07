@@ -5,8 +5,10 @@ services:
     build: .
     container_name: prograde-bot
     restart: unless-stopped
-    env_file:
-      - .env                  # set DISCORD_TOKEN=
     volumes:
-      # So you can keep adding new files without rebuilding
+      # This makes the current folder become the bot's data folder
+      - .:/app
+      # Optional: persist uploaded files in a subfolder (extra safety)
       - ./prograde_files:/app/prograde_files
+    environment:
+      - DISCORD_TOKEN=${DISCORD_TOKEN}  # optional fallback
