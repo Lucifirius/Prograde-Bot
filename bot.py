@@ -16,8 +16,7 @@ intents.message_content = True
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 FILES_DIR = Path(__file__).parent / "prograde_files"
-AUTHORIZED_USER_ID = 860310503578009630
-
+AUTHORIZED_USER_IDS = {860310503578009630, 918951765188165663}
 
 @bot.event
 async def on_ready():
@@ -66,7 +65,7 @@ async def prograde(ctx, number: str = None):
 async def upload(ctx):
     print(f"!upload invoked by {ctx.author} ({ctx.author.id})")  # debug line
 
-    if ctx.author.id != AUTHORIZED_USER_ID:
+    if ctx.author.id not in AUTHORIZED_USER_IDS:
         await ctx.send("❌ You don't have permission to use `!upload`.", delete_after=10)
         await ctx.message.delete(delay=10)
         return
