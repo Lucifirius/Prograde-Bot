@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+git config --global --add safe.directory /app
+
 REPO_URL="https://github.com/Lucifirius/Prograde-Bot.git"
 BRANCH="main"
 
